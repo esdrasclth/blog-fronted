@@ -86,8 +86,15 @@ export function getStrapiMediaUrl(url: string | undefined): string {
 
 /** Extrae la URL de cover soportando múltiples formatos de respuesta de Strapi */
 export function getArticleCoverUrl(article: Article): string | undefined {
-  const attrs = article.attributes ?? (article as Record<string, unknown>);
-  const cover = attrs.cover ?? (article as Record<string, unknown>).cover;
+  // Strapi puede devolver distintas formas según el `populate` y/o versión/config del endpoint.
+  // Para no pelear con los tipos, trabajamos con `unknown` y luego tipamos mínimamente lo que necesitamos.
+  const articleAny = article as unknown as {
+    attributes?: Record<string, unknown>;
+    cover?: Record<string, unknown>;
+  };
+
+  const attrs = articleAny.attributes ?? articleAny;
+  const cover = (attrs as { cover?: unknown }).cover ?? articleAny.cover;
   if (!cover) return undefined;
   // Formato: cover.data.attributes.url
   const url =
