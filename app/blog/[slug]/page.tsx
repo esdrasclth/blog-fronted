@@ -33,26 +33,30 @@ export default async function BlogPost({ params }: BlogPostProps) {
   const coverUrl = getArticleCoverUrl(article);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-      <header className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
-          <Link
-            href="/"
-            className="text-lg font-medium text-blue-600 hover:underline dark:text-blue-400"
-          >
-            ← Volver al inicio
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <nav className="sticky top-0 w-full z-50 bg-background/90 backdrop-blur-md flex justify-between items-center px-6 md:px-12 py-5 border-b border-white/5">
+        <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-2 group">
+            <span className="text-xl md:text-2xl font-headline text-white tracking-tight font-black transition-opacity group-hover:opacity-80">
+              ESDRAS CLOTHER<span className="text-slate-400">.</span>
+            </span>
           </Link>
+          <div className="flex gap-8 items-center">
+            <Link
+              className="text-primary font-bold font-sans text-[10px] md:text-xs uppercase tracking-widest hover:text-green-400 transition-colors"
+              href="/"
+            >
+              ← Volver
+            </Link>
+          </div>
         </div>
-      </header>
+      </nav>
 
-      <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-        <header className="mb-8">
-          <h1 className="mb-4 text-4xl font-bold text-zinc-900 dark:text-zinc-50">
-            {attributes.title}
-          </h1>
+      <article className="mx-auto max-w-3xl px-6 py-16 sm:px-6 flex-1 w-full">
+        <header className="mb-12">
           <time
             dateTime={attributes.publishedAt}
-            className="text-zinc-500 dark:text-zinc-400"
+            className="font-sans text-[10px] uppercase tracking-widest text-slate-400 mb-4 block"
           >
             {new Date(attributes.publishedAt).toLocaleDateString('es-ES', {
               year: 'numeric',
@@ -60,25 +64,35 @@ export default async function BlogPost({ params }: BlogPostProps) {
               day: 'numeric',
             })}
           </time>
+          <h1 className="text-4xl md:text-5xl font-headline font-bold text-white italic leading-tight">
+            {attributes.title}
+          </h1>
         </header>
 
         {coverUrl && (
-          <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-lg bg-zinc-200 dark:bg-zinc-800">
+          <div className="relative mb-12 aspect-video w-full overflow-hidden bg-[#18211c]">
             <Image
               src={getStrapiMediaUrl(coverUrl)}
               alt={attributes.title}
               fill
-              className="object-cover"
+              className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
               priority
               unoptimized
             />
           </div>
         )}
 
-        <div className="text-zinc-700 dark:text-zinc-300">
+        <div className="text-slate-300 font-sans text-base md:text-lg leading-relaxed font-light">
           <ArticleContent content={attributes.content} />
         </div>
       </article>
+
+      <footer className="mt-12 border-t border-white/5 py-8 text-center bg-background relative">
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-primary"></div>
+        <span className="font-sans text-[10px] uppercase tracking-widest text-slate-500">
+          © {new Date().getFullYear()} ESDRAS CLOTHER. All Rights Reserved.
+        </span>
+      </footer>
     </div>
   );
 }
